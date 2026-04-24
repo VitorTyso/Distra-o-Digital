@@ -54,9 +54,7 @@ export async function POST(request: Request) {
     if (!resendApiKey) {
       return NextResponse.json({
         ok: true,
-        mode: "mock",
-        message:
-          "Captura simulada com sucesso. Configure AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME e/ou RESEND_API_KEY para envio real.",
+        mode: "lead_only",
       });
     }
 
@@ -80,10 +78,15 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("send-diagnosis failed", error);
 
+    const message =
+      error instanceof Error && error.message === "airtable_not_configured"
+        ? "Airtable nao configurado"
+        : "send_failed";
+
     return NextResponse.json(
       {
         ok: false,
-        error: "send_failed",
+        error: message,
       },
       { status: 500 },
     );

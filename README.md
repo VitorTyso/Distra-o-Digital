@@ -25,10 +25,13 @@ Se `RESEND_API_KEY` não estiver definida, a API usa modo mock e o fluxo continu
 Se quiser capturar somente `e-mail` e `idade`, configure:
 
 ```bash
-AIRTABLE_API_KEY=
+AIRTABLE_TOKEN=
 AIRTABLE_BASE_ID=appGVt93TC9Ri9Xvy
 AIRTABLE_TABLE_NAME="Diagnostico Distração digital"
 ```
+
+O app envia para uma rota interna do projeto e essa rota faz o `POST` para a API do Airtable no backend da Vercel.
+Sem `AIRTABLE_TOKEN`, `AIRTABLE_BASE_ID` e `AIRTABLE_TABLE_NAME`, a captura falha explicitamente.
 
 Na tabela do Airtable, crie estas colunas:
 

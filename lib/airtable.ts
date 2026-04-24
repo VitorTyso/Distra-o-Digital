@@ -5,15 +5,12 @@ type LeadPayload = {
 };
 
 export async function sendLeadToAirtable(payload: LeadPayload) {
-  const apiKey = process.env.AIRTABLE_API_KEY;
+  const token = process.env.AIRTABLE_TOKEN;
   const baseId = process.env.AIRTABLE_BASE_ID;
   const tableName = process.env.AIRTABLE_TABLE_NAME;
 
-  if (!apiKey || !baseId || !tableName) {
-    return {
-      ok: true,
-      mode: "mock" as const,
-    };
+  if (!token || !baseId || !tableName) {
+    throw new Error("airtable_not_configured");
   }
 
   const response = await fetch(
@@ -21,7 +18,7 @@ export async function sendLeadToAirtable(payload: LeadPayload) {
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -44,6 +41,5 @@ export async function sendLeadToAirtable(payload: LeadPayload) {
 
   return {
     ok: true,
-    mode: "live" as const,
   };
 }
