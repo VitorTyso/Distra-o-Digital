@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 
+import { sendLeadToAirtable } from "@/lib/airtable";
 import { createEmailTemplate } from "@/lib/email";
-import { sendLeadToGoogleSheets } from "@/lib/google-sheets";
 import { calculateDiagnosis, getAgeRangeLabel, type AnswerMap } from "@/lib/quiz";
 
 type Payload = {
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       "https://www.vitortyso.com.br/";
     const ageLabel = getAgeRangeLabel(answers.ageRange) ?? "Nao informado";
 
-    await sendLeadToGoogleSheets({
+    await sendLeadToAirtable({
       email,
       ageLabel,
       ageAverage: finalDiagnosis.ageAverage,
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
         ok: true,
         mode: "mock",
         message:
-          "Captura simulada com sucesso. Configure GOOGLE_SHEETS_WEBHOOK_URL e/ou RESEND_API_KEY para envio real.",
+          "Captura simulada com sucesso. Configure AIRTABLE_API_KEY, AIRTABLE_BASE_ID, AIRTABLE_TABLE_NAME e/ou RESEND_API_KEY para envio real.",
       });
     }
 

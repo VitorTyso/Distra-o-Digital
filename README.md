@@ -20,15 +20,23 @@ RESEND_FROM_EMAIL="Distração Digital <onboarding@resend.dev>"
 
 Se `RESEND_API_KEY` não estiver definida, a API usa modo mock e o fluxo continua normalmente.
 
-## Google Sheets
+## Airtable
 
 Se quiser capturar somente `e-mail` e `idade`, configure:
 
 ```bash
-GOOGLE_SHEETS_WEBHOOK_URL=
+AIRTABLE_API_KEY=
+AIRTABLE_BASE_ID=appGVt93TC9Ri9Xvy
+AIRTABLE_TABLE_NAME="Diagnostico Distração digital"
 ```
 
-O endpoint espera um `POST` com este JSON:
+Na tabela do Airtable, crie estas colunas:
+
+- `Email`
+- `Faixa etaria`
+- `Idade media`
+
+O payload enviado pelo app é equivalente a:
 
 ```json
 {
