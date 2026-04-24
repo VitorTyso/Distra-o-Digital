@@ -48,7 +48,6 @@ export async function POST(request: Request) {
     await sendLeadToAirtable({
       email,
       ageLabel,
-      ageAverage: finalDiagnosis.ageAverage,
     });
 
     if (!resendApiKey) {
@@ -78,10 +77,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("send-diagnosis failed", error);
 
-    const message =
-      error instanceof Error && error.message === "airtable_not_configured"
-        ? "Airtable nao configurado"
-        : "send_failed";
+    const message = error instanceof Error ? error.message : "send_failed";
 
     return NextResponse.json(
       {

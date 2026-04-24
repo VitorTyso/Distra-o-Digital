@@ -1,7 +1,6 @@
 type LeadPayload = {
   email: string;
   ageLabel: string;
-  ageAverage: number;
 };
 
 export async function sendLeadToAirtable(payload: LeadPayload) {
@@ -25,9 +24,8 @@ export async function sendLeadToAirtable(payload: LeadPayload) {
         records: [
           {
             fields: {
-              Email: payload.email,
+              email: payload.email,
               "Faixa etaria": payload.ageLabel,
-              "Idade media": payload.ageAverage,
             },
           },
         ],
@@ -36,7 +34,8 @@ export async function sendLeadToAirtable(payload: LeadPayload) {
   );
 
   if (!response.ok) {
-    throw new Error(`airtable_failed:${response.status}`);
+    const errorText = await response.text();
+    throw new Error(`airtable_failed:${response.status}:${errorText}`);
   }
 
   return {
