@@ -37,6 +37,7 @@ export function DiagnosisApp() {
   const [emailTouched, setEmailTouched] = useState(false);
   const [analysisMessageIndex, setAnalysisMessageIndex] = useState(0);
   const [emailStatus, setEmailStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
 
   const diagnosis = useMemo(() => calculateDiagnosis(answers), [answers]);
   const currentQuestion = questions[currentQuestionIndex];
@@ -121,6 +122,7 @@ export function DiagnosisApp() {
     if (!isValidEmail(email)) return;
 
     setEmailStatus("loading");
+    setEmailErrorMessage("");
 
     try {
       const response = await fetch("/api/send-diagnosis", {
@@ -135,12 +137,19 @@ export function DiagnosisApp() {
         }),
       });
 
-      const payload = (await response.json()) as { ok: boolean };
-      setEmailStatus(payload.ok ? "success" : "error");
+      const payload = (await response.json()) as { ok: boolean; error?: string };
+
+      if (!response.ok || !payload.ok) {
+        setEmailStatus("error");
+        setEmailErrorMessage("Nao foi possivel salvar seus dados agora. Tente novamente.");
+        return;
+      }
+
+      setEmailStatus("success");
+      setPhase("result");
     } catch {
       setEmailStatus("error");
-    } finally {
-      setPhase("result");
+      setEmailErrorMessage("Nao foi possivel salvar seus dados agora. Tente novamente.");
     }
   }
 
@@ -292,6 +301,9 @@ export function DiagnosisApp() {
                   />
                   {emailHasError && (
                     <p className="mt-3 text-sm text-red-500">Digite um e-mail valido para continuar.</p>
+                  )}
+                  {emailStatus === "error" && emailErrorMessage && (
+                    <p className="mt-3 text-sm text-red-500">{emailErrorMessage}</p>
                   )}
                   <button
                     type="submit"
