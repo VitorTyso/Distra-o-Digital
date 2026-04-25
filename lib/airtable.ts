@@ -1,6 +1,7 @@
 type LeadPayload = {
   email: string;
   ageLabel: string;
+  ageAverage: number;
 };
 
 export async function sendLeadToAirtable(payload: LeadPayload) {
@@ -26,6 +27,7 @@ export async function sendLeadToAirtable(payload: LeadPayload) {
             fields: {
               email: payload.email,
               "Faixa etaria": payload.ageLabel,
+              "Idade media": payload.ageAverage,
             },
           },
         ],

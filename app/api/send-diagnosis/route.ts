@@ -48,6 +48,7 @@ export async function POST(request: Request) {
     await sendLeadToAirtable({
       email,
       ageLabel,
+      ageAverage: finalDiagnosis.ageAverage,
     });
 
     if (!resendApiKey) {
