@@ -27,7 +27,7 @@ export async function sendLeadToAirtable(payload: LeadPayload) {
             fields: {
               email: payload.email,
               "Faixa etaria": payload.ageLabel,
-              "Idade media": payload.ageAverage,
+              "Idade media": String(payload.ageAverage),
             },
           },
         ],
